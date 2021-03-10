@@ -1,16 +1,20 @@
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import uuid from 'uuid/v1'
 
 import Typeform from './Typeform'
 import withRequiredLogin from '../../hocs/with-login/withRequiredLogin'
 import { updateCurrentUser } from '../../../redux/actions/currentUser'
+import { selectCurrentUser } from '../../../redux/selectors/currentUserSelector'
+
+function mapStateToProps(state) {
+  const user = selectCurrentUser(state)
+  return { culturalSurveyId: uuid(), userId: user.pk }
+}
 
 export default compose(
   withRequiredLogin,
   withRouter,
-  connect(
-    null,
-    { updateCurrentUser }
-  )
+  connect(mapStateToProps, { updateCurrentUser })
 )(Typeform)
